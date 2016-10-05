@@ -49,7 +49,8 @@ public class PicModel {
     public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
-
+    
+    //add picture to database
     public void insertPic(byte[] b, String type, String name, String user) {
         try {
             Convertors convertor = new Convertors();
@@ -135,7 +136,7 @@ public class PicModel {
     public java.util.LinkedList<Pic> getPicsForUser(String User) {
         java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
+        PreparedStatement ps = session.prepare("select picid from userpiclist where user =?"); //select all pic id's
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -145,13 +146,13 @@ public class PicModel {
             System.out.println("No Images returned");
             return null;
         } else {
-            for (Row row : rs) {
+            for (Row row : rs) { //go through every row in pic list and convert to string
                 Pic pic = new Pic();
                 java.util.UUID UUID = row.getUUID("picid");
                 System.out.println("UUID" + UUID.toString());
-                pic.setUUID(UUID);
+                pic.setUUID(UUID); 
                 Pics.add(pic);
-
+                //add every picture id to item in linked list
             }
         }
         return Pics;

@@ -28,10 +28,10 @@ public class User {
     }
     
     public boolean RegisterUser(String username, String Password){
-        AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
+        AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();                      
         String EncodedPassword=null;
         try {
-            EncodedPassword= sha1handler.SHA1(Password);
+            EncodedPassword= sha1handler.SHA1(Password);                        //encrypt password
         }catch (UnsupportedEncodingException | NoSuchAlgorithmException et){
             System.out.println("Can't check your password");
             return false;

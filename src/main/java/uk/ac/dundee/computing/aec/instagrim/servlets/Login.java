@@ -51,9 +51,10 @@ public class Login extends HttpServlet {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         
+        //USer Model
         User us=new User();
         us.setCluster(cluster);
-        boolean isValid=us.IsValidUser(username, password);
+        boolean isValid=us.IsValidUser(username, password); //method that checks if user is valid
         HttpSession session=request.getSession();
         System.out.println("Session in servlet "+session);
         if (isValid){
@@ -62,7 +63,7 @@ public class Login extends HttpServlet {
             lg.setUsername(username);
             //request.setAttribute("LoggedIn", lg);
             
-            session.setAttribute("LoggedIn", lg);
+            session.setAttribute("LoggedIn", lg); //contains information on logged in status
             System.out.println("Session in servlet "+session);
             RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
 	    rd.forward(request,response);

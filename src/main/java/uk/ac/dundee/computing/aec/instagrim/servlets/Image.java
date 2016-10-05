@@ -71,9 +71,11 @@ public class Image extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+        //Split up each element of url and place into array e.g. abc.com[1]/images[1]/something[2]
         String args[] = Convertors.SplitRequestPath(request);
         int command;
         try {
+            //look up hash map above image1, images2, thumb3
             command = (Integer) CommandsMap.get(args[1]);
         } catch (Exception et) {
             error("Bad Operator", response);
@@ -96,15 +98,18 @@ public class Image extends HttpServlet {
 
     private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
-        tm.setCluster(cluster);
-        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
-        RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
-        request.setAttribute("Pics", lsPics);
-        rd.forward(request, response);
+        tm.setCluster(cluster); //tells model how to connect to db
+        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User); //get all the pictures for User
+        RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp"); //call up view UserPics jsp
+        request.setAttribute("Pics", lsPics); //send list to Userpics.jsp
+        rd.forward(request, response); //transfer control to userpics.jsp
+        
+        //call method from PicModel.java (get picture from user)
 
     }
 
     private void DisplayImage(int type,String Image, HttpServletResponse response) throws ServletException, IOException {
+        
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
   

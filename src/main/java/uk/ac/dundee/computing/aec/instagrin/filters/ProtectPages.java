@@ -30,6 +30,8 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 @WebFilter(filterName = "ProtectPages", urlPatterns = {"/upload.jsp"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE})
 public class ProtectPages implements Filter {
     
+    //check whether a person is logged in or not
+    
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If

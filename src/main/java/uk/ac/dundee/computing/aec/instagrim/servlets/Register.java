@@ -47,6 +47,7 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
+        String confirmpassword=request.getParameter("confirmpassword");
         
         User us=new User();
         us.setCluster(cluster);
