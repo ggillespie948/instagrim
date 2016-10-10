@@ -37,7 +37,7 @@
                     %>
                     <li><a href="${pageContext.request.contextPath}/upload.jsp">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
-                    <li><a href="#">Your Profile</a></li>
+                    <li><a href="${pageContext.request.contextPath}/profile.jsp">Your Profile</a></li>
                     <li><a href="${pageContext.request.contextPath}/logout.jsp">Sign Out</a></li>
                     <%}
                             }else{
@@ -53,7 +53,12 @@
             <div class="main-content">
                 <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
                 <div class="content">
-                    <h3> <%=lg.getUsername() %>'s Profile </h3>
+                    <%
+                        String user = lg.getUsername();
+                        
+                        
+                        %>
+                    <h3><%= user.toUpperCase() %>'s Profile </h3>
                     <div class="profile"> 
                     <%--
                         icon, bio, link to images, firends??????????

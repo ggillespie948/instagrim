@@ -36,17 +36,28 @@ public class User {
             System.out.println("Can't check your password");
             return false;
         }
+         
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
-       
-        BoundStatement boundStatement = new BoundStatement(ps);
-        session.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        username,EncodedPassword));
-        //We are assuming this always works.  Also a transaction would be good here !
+        BoundStatement boundStatement = new BoundStatement(ps);        
         
-        return true;
+        try{
+            session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username,EncodedPassword));                                     //try execute statement
+            
+            //We are assuming this always works.  Also a transaction would be good here !
+            return true;
+            
+        } catch (Exception e){
+            System.out.println("EXCEPTION EXECUTING QUERY: " + e.getMessage());
+            return false;
+        }
+        
+        
     }
+    
+    
     
     public boolean IsValidUser(String username, String Password){
         AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
@@ -75,11 +86,11 @@ public class User {
                     return true;
             }
         }
-   
-    
-    return false;  
+        
+        return false;  
     }
-       public void setCluster(Cluster cluster) {
+    
+    public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
 

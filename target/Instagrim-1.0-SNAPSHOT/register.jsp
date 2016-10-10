@@ -29,54 +29,113 @@
             <div class="main-content">
                 <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
                 <div class="content">
-                    <h3>1. Create Your Account..</h3>
-                    <form method="POST"  action="Register">
+                    <div class="content-banner"> 
+                        <h3> Create Your Account </h3>
+                    </div>
+                    <form id="registerUser" action="Register" onsubmit="return formValidation()" method="POST">
                         <ul>
                             <label for ="username"> Username </label>
-                            <li><input id="username" type="text" name="username"></li>
+                            <li><input type="text" name="username" required> <span id="usernameErrorMsg"></span> </li>
                             <br>
                             <label for="password"> Password </label>
-                            <li><input id="password" type="password" name="password"></li>
+                            <li><input type="password" name="password" required> <span id="passwordErrorMsg"></span> </li>
                             <br>
                             <label for="confirm-password"> Confirm Password  </label>
-                            <li><input id="confirm-password" type="password" name="confirmpassword"></li>
-                        </ul>
-                        <br/>
+                            <li><input type="password" name="confirmpassword" required> <span id="confirmpasswordErrorMsg"></span></li>
+                            <br/>
                         <input type="submit" value="Register"> 
+                        </ul>
+                        
                     </form>
                 </div>
                 
             </div>
                 
-        <script>
-                        $(document).ready(function(){
-                            $("button").click(function(){
-                                
-                                var elem = document.getElementById("sidebar-toggle");
-                                if(elem.textContent == ">"){
+        <script type="text/javascript">
+            //Script for sliding menu
+                $(document).ready(function(){
+                    $("button").click(function(){
+                               
+                        var elem = document.getElementById("sidebar-toggle");
+                        if(elem.textContent == ">"){
                                     
-                                    $(".main-content").animate({
-                                    'marginLeft': '+=200px'}, 500);
+                            $(".main-content").animate({
+                                'marginLeft': '+=200px'}, 500);
             
-                                    elem.textContent = "<";
+                            elem.textContent = "<";
                                     
-                                } else {
+                        } else {
                                                                        
-                                    $(".main-content").animate({
-                                    'marginLeft': '-=200px'}, 500);
+                            $(".main-content").animate({
+                                'marginLeft': '-=200px'}, 500);
                                     
-                                    elem.textContent = ">";
-                                }
-                                                                                                
-                            });
+                            elem.textContent = ">";
                             
-                        });
-
-                        var showlogin = document.getElementById("Login");
-                        showlogin.onclick = function(){
-                            
-                            return false;
                         }
+                        
+                        
+                                                                                                
+                    });
+                });
+                
+                //Unfinished quick login option
+                var showlogin = document.getElementById("Login");
+                showlogin.onclick = function(){
+                            
+                return false;
+                }
+            
+            //Client-side form validation for username and confirm password
+            function formValidation(){
+                var uservar = document.getElementsByName("username");
+                var passvar = document.getElementsByName("password");
+                var confirmpassvar = document.getElementsByName("confirmpassword");
+                
+                
+                var isValid = true;
+                
+                if (uservar[0].value.match(/[^a-z0-9]/i)){
+                    document.getElementById("usernameErrorMsg").innerHTML = "User name must consist of letters and digits [a-z] [0-9].";
+                    isValid = false;
+                } else {
+                    document.getElementById("usernameErrorMsg").innerHTML = "";
+                }
+                
+                if (!uservar[0].value.match(/[a-z]/i)){
+                    document.getElementById("usernameErrorMsg").innerHTML = "Username must consist of at least one letter.";
+                    isValid = false;
+                } else {
+                    document.getElementById("usernameErrorMsg").innerHTML = "";
+                }
+                
+                if (passvar[0].value.length < 5){
+                    document.getElementById("passwordErrorMsg").innerHTML = "Password must be atleast 5 characters in length.";
+                    isValid = false;
+                } else {
+                    document.getElementById("passwordErrorMsg").innerHTML = "";
+                    
+                }
+                
+                var passcheck = passvar[0].value.localeCompare(confirmpassvar[0].value);
+                
+                if(passcheck !== 0){
+                    document.getElementById("confirmpasswordErrorMsg").innerHTML = "Passwords do not match.";
+                    isValid = false;
+                } else {
+                    document.getElementById("confirmpasswordErrorMsg").innerHTML = ""
+                }
+                    
+                
+                if (isValid === true){
+                    return true;
+                } else {
+                    return false;
+                }
+                
+                
+            }
+            
+            
                         
         </script>
     </body>

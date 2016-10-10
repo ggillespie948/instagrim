@@ -31,7 +31,7 @@
                     %>
                     <li><a href="${pageContext.request.contextPath}/upload.jsp">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
-                    <li><a href="#">Your Profile</a></li>
+                    <li><a href="${pageContext.request.contextPath}/profile.jsp">Your Profile</a></li>
                     <li><a href="${pageContext.request.contextPath}/logout.jsp">Sign Out</a></li>
                     <%}
                             }else{

@@ -44,16 +44,18 @@ public class Register extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         String confirmpassword=request.getParameter("confirmpassword");
+        
         
         User us=new User();
         us.setCluster(cluster);
         us.RegisterUser(username, password);
         
-	response.sendRedirect("/Instagrim");
+        //redirect to login page
+	response.sendRedirect("/Instagrim/login.jsp");
         
     }
 
