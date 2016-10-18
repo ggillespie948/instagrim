@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
  */
 public class Pic {
 
+    //Private gloabal variables: to be changed!!!!!!!!!!!!!!!!
     private ByteBuffer bImage = null;
     private int length;
     private String type;

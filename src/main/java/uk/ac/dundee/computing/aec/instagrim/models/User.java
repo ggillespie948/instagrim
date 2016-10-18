@@ -27,7 +27,7 @@ public class User {
         
     }
     
-    public boolean RegisterUser(String username, String Password){
+    public boolean RegisterUser(String username, String Password, String email, String fname, String lname){
         AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();                      
         String EncodedPassword=null;
         try {
@@ -38,21 +38,23 @@ public class User {
         }
          
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
+        PreparedStatement ps = session.prepare("insert into userprofiles (login,first_name,last_name,password) Values(?, ?, ?, ?)");
         BoundStatement boundStatement = new BoundStatement(ps);        
         
-        try{
+        
+        
+        //try{
             session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        username,EncodedPassword));                                     //try execute statement
+                        username,fname,lname,EncodedPassword));                                     //try execute statement
             
             //We are assuming this always works.  Also a transaction would be good here !
             return true;
             
-        } catch (Exception e){
-            System.out.println("EXCEPTION EXECUTING QUERY: " + e.getMessage());
-            return false;
-        }
+        //} catch (Exception e){
+          //  System.out.println("EXCEPTION EXECUTING QUERY: " + e.getMessage());
+          //  return false;
+        //}
         
         
     }

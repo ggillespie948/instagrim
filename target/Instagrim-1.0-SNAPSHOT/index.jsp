@@ -17,7 +17,7 @@
     </head>
     <body>
         <div class="sidebar-container">
-            <a href="index.jsp"><img src="icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
+            <a href=""><img src="icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
             <div id="banner">
                 <h1> Instagrim  </h1>
             </div>
@@ -29,15 +29,15 @@
                             String UserName = lg.getUsername();
                             if (lg.getlogedin()) {
                     %>
-                    <li><a href="upload.jsp">Upload</a></li>
+                    <li><a href="/Instagrim/Upload">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
-                    <li><a href="profile.jsp">Your Profile</a></li>
+                    <li><a href="/Instagrim/Profile/<%=lg.getUsername()%>">Your Profile</a></li>
                     <li><a href="logout.jsp">Sign Out</a></li>
                     <%}
                             }else{
                                         %>
-                    <li><a href="login.jsp">Login</a></li>
-                    <li><a href="register.jsp">Register</a></li>
+                    <li><a href="/Instagrim/Login">Login</a></li>
+                    <li><a href="/Instagrim/Register">Register</a></li>
                     <%
                             
                         }%>

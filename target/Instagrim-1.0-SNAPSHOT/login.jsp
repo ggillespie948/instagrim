@@ -15,14 +15,14 @@
     </head>
     <body>
         <div class="sidebar-container">
-            <a href="index.jsp"><img src="icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
+            <a href="../Instagrim/"><img src="icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
             <div id="banner">
                 <h1> Instagrim  </h1>
             </div>
             <div id="sidebar">
                 <ul>
-                    <li><a href="login.jsp">Login</a></li>
-                    <li><a href="register.jsp">Register</a></li>
+                    <li><a href="/Instagrim/Login">Login</a></li>
+                    <li><a href="/Instagrim/Register">Register</a></li>
                 </ul>
             </div>
         </div>
@@ -35,7 +35,7 @@
                         <li>Username <input type="text" name="username" required></li>
                         <li>Password <input type="password" name="password" required></li>
                         <br/>
-                        <input type="submit" value="Login"> 
+                        <input type="submit" value="Login" class="button"> 
                     </ul>
                     <br/>
                     

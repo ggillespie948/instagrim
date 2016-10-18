@@ -49,10 +49,23 @@ h3{
 
 span{
     color: red;
+    font-size: 18px;
 }
 
 .sidebar-container{
     
+}
+
+.button{
+    background-color: #080339; /* blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    float: center;
 }
 
 #sidebar{
@@ -102,11 +115,15 @@ span{
     margin-top: -300px;
     background: #00aeef;
     width: 100%;
-    height: 1200px;
+    height: 1300px;;
     margin-left: 200px;
     position: relative;
 
     
+}
+.profile{
+    background: #080339;
+    color: red;
 }
 
 /* 

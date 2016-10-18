@@ -6,6 +6,7 @@
 
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
+import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +18,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.datastax.driver.core.Session;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
@@ -51,6 +56,7 @@ public class Login extends HttpServlet {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         
+        
         //User Model
         User us=new User();
         us.setCluster(cluster);
@@ -62,6 +68,25 @@ public class Login extends HttpServlet {
             LoggedIn lg= new LoggedIn();
             lg.setLogedin();
             lg.setUsername(username);
+            
+            
+            //Retrieve First Name of Account
+            Session sessionCQL = cluster.connect("instagrim");
+            PreparedStatement ps;
+            ps = sessionCQL.prepare("select first_name from userprofiles where login =?");
+            
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = sessionCQL.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+            for (Row row : rs) {
+                String First_Name = row.getString("first_name");
+                lg.setFname(First_Name);
+            }
+        
+            
+            //lg.setLname(lname);
             //request.setAttribute("LoggedIn", lg);
             
             session.setAttribute("LoggedIn", lg); //contains information on logged in status
@@ -69,10 +94,18 @@ public class Login extends HttpServlet {
             RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
 	    rd.forward(request,response);
             
+            
         }else{
-            response.sendRedirect("/Instagrim/login.jsp");
+            response.sendRedirect("/Instagrim/Login");
         }
         
+    }
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        
+        RequestDispatcher rd = request.getRequestDispatcher("/login.jsp"); //call up view login jsp
+        rd.forward(request, response); //transfer control to login.jsp
     }
 
     /**

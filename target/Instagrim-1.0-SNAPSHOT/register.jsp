@@ -15,14 +15,14 @@
     </head>
     <body>
         <div class="sidebar-container">
-            <a href="index.jsp"><img src="icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
+            <a href="/Instagrim"><img src="icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
             <div id="banner">
                 <h1> Instagrim  </h1>
             </div>
             <div id="sidebar">
                 <ul>
-                    <li><a href="login.jsp">Login</a></li>
-                    <li><a href="register.jsp">Register</a></li>
+                    <li><a href="/Instagrim/Login">Login</a></li>
+                    <li><a href="/Instagrim/Register">Register</a></li>
                 </ul>
             </div>
         </div>
@@ -40,10 +40,19 @@
                             <label for="password"> Password </label>
                             <li><input type="password" name="password" required> <span id="passwordErrorMsg"></span> </li>
                             <br>
-                            <label for="confirm-password"> Confirm Password  </label>
+                            <label for="confirmpassword"> Confirm Password  </label>
                             <li><input type="password" name="confirmpassword" required> <span id="confirmpasswordErrorMsg"></span></li>
                             <br/>
-                        <input type="submit" value="Register"> 
+                            <label for="email-address"> Email </label>
+                            <li><input type="email" name="email-address" required></li>
+                            <br/>
+                            <label for="first-name"> First Name  </label>
+                            <li><input type="text" name="first-name" required></li>
+                            <br/>
+                            <label for="last-name"> Last Name  </label>
+                            <li><input type="text" name="last-name" required></li>
+                            <br/>
+                        <input type="submit" value="Register" class="button"> 
                         </ul>
                         
                     </form>

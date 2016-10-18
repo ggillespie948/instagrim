@@ -17,7 +17,7 @@
     </head>
     <body>
         <div class="sidebar-container">
-            <a href="${pageContext.request.contextPath}/index.jsp"><img src="${pageContext.request.contextPath}/icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
+            <a href="../Instagrim/"><img src="${pageContext.request.contextPath}/icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
             <div id="banner">
                 <h1> Instagrim  </h1>
             </div>
@@ -31,7 +31,7 @@
                     %>
                     <li><a href="${pageContext.request.contextPath}/upload.jsp">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
-                    <li><a href="${pageContext.request.contextPath}/profile.jsp">Your Profile</a></li>
+                    <li><a href="/Instagrim/Profile/<%=lg.getUsername()%>">Your Profile</a></li>
                     <li><a href="${pageContext.request.contextPath}/logout.jsp">Sign Out</a></li>
                     <%}
                             }else{

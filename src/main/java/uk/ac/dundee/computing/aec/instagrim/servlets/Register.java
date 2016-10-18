@@ -31,7 +31,12 @@ public class Register extends HttpServlet {
         cluster = CassandraHosts.getCluster();
     }
 
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        
+        RequestDispatcher rd = request.getRequestDispatcher("/register.jsp"); //call up view login jsp
+        rd.forward(request, response); //transfer control to login.jsp
+    }
 
 
     /**
@@ -48,14 +53,21 @@ public class Register extends HttpServlet {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         String confirmpassword=request.getParameter("confirmpassword");
+        String email=request.getParameter("email-address");
+        String fname=request.getParameter("first-name");
+        String lname=request.getParameter("last-name");
         
         
+        //add further validation for user name and password match
+        //if unsuccessful redirect
+        
+        //Register New User
         User us=new User();
         us.setCluster(cluster);
-        us.RegisterUser(username, password);
+        us.RegisterUser(username, password, email, fname, lname);
         
         //redirect to login page
-	response.sendRedirect("/Instagrim/login.jsp");
+	response.sendRedirect("/Instagrim/Login");
         
     }
 

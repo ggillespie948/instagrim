@@ -23,7 +23,7 @@
     </head>
     <body>
         <div class="sidebar-container">
-            <a href="${pageContext.request.contextPath}/index.jsp"><img src="${pageContext.request.contextPath}/icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
+            <a href="../../Instagrim"><img src="${pageContext.request.contextPath}/icon.jpg" style="width:200px; height:200px; vertical-align:bottom;"></a>
             <div id="banner">
                 <h1> Instagrim  </h1>
             </div>
@@ -32,21 +32,22 @@
                      <%
                         LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
                         if (lg != null) {
-                            String UserName = lg.getUsername();
+                            
                             if (lg.getlogedin()) {
                     %>
                     <li><a href="${pageContext.request.contextPath}/upload.jsp">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
-                    <li><a href="${pageContext.request.contextPath}/profile.jsp">Your Profile</a></li>
+                    <li><a href="/Instagrim/Profile/<%=lg.getUsername()%>">Your Profile</a></li>
                     <li><a href="${pageContext.request.contextPath}/logout.jsp">Sign Out</a></li>
                     <%}
                             }else{
                                         %>
                     <li><a href="login.jsp">Login</a></li>
                     <li><a href="register.jsp">Register</a></li>
-                    <%
-                            
-                        }%>
+                    <% 
+
+                    
+                                        }%>
                 </ul>
             </div>
         </div>
@@ -54,15 +55,15 @@
                 <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
                 <div class="content">
                     <%
-                        String user = lg.getUsername();
-                        
-                        
+                        String FirstName = lg.getFname();
                         %>
-                    <h3><%= user.toUpperCase() %>'s Profile </h3>
+                    <h3> <%= FirstName%>'s Profile </h3>
                     <div class="profile"> 
                     <%--
-                        icon, bio, link to images, firends??????????
+                    
                     --%>
+                    <br>
+                    Bio: This is a test area of text help to format the final website
                     
                     </div>
                 </div>
@@ -93,11 +94,7 @@
                             
                         });
 
-                        var showlogin = document.getElementById("Login");
-                        showlogin.onclick = function(){
-                            
-                            return false;
-                        }
+                        
                         
         </script>
     </body>
