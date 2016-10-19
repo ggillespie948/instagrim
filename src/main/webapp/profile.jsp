@@ -57,14 +57,39 @@
                     <%
                         String FirstName = lg.getFname();
                         %>
-                    <h3> <%= FirstName%>'s Profile </h3>
+                    <h3> <%= FirstName%>'s Profile - ${ProfileName}  </h3>
                     <div class="profile"> 
                     <%--
                     
                     --%>
                     <br>
+                    ${ProfileName};
                     Bio: This is a test area of text help to format the final website
-                    
+                    <br>
+                    Everybody n the 3 1 3 put your motheruking hands up and follow meeeeeeeeeeeeeeeeeeeeeee
+                    <h2> <%= FirstName %>'s Uploads </h2>
+                    <%
+                        //Recieve UserPicStream from Servlet here 
+                        java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("UserPicStream");
+                         
+                        if(lsPics == null){
+                           
+                        
+                        %>
+                        <p> User is yet to upload </p>
+                        <%} else {
+
+                            //go through each pic in list
+                            Iterator<Pic> iterator;
+                            iterator = lsPics.iterator();
+                            while (iterator.hasNext()) {
+                            Pic p = (Pic) iterator.next();
+
+                        %>
+                        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a>  
+                        <%
+                            }
+                                } %>
                     </div>
                 </div>
                 

@@ -25,7 +25,9 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
  */
 @WebServlet(name = "Register", urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
+    
     Cluster cluster=null;
+    
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
@@ -58,7 +60,10 @@ public class Register extends HttpServlet {
         String lname=request.getParameter("last-name");
         
         
-        //add further validation for user name and password match
+        //add further validation for user name and password match *****************************
+        boolean validDetails = true;
+        
+        
         //if unsuccessful redirect
         
         //Register New User

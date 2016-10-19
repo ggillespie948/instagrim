@@ -86,14 +86,7 @@
                                                                                                 
                     });
                 });
-                
-                //Unfinished quick login option
-                var showlogin = document.getElementById("Login");
-                showlogin.onclick = function(){
-                            
-                return false;
-                }
-            
+                                            
             //Client-side form validation for username and confirm password
             function formValidation(){
                 var uservar = document.getElementsByName("username");
@@ -143,8 +136,6 @@
                 
                 
             }
-            
-            
                         
         </script>
     </body>

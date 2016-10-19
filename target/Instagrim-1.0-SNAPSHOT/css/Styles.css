@@ -35,7 +35,7 @@ h2{
 
 h3{
     font-size: 36px;
-    text-align: left;;
+    text-align: left;
     background: #00aeef;
     border-radius: 25px;
     padding-left: 2%;
@@ -91,12 +91,10 @@ span{
 #sidebar ul li a{
     padding: 15px 20px;
     font-size: 16px;
-    font-width: 100;
     color: white;
     text-decoration: none;
     display: block;
     border-bottom: 1px solid white;
-    border-width: 50%;
     text-align: left;
     
 }
@@ -110,12 +108,12 @@ span{
     Main Content Panel - contains overflow, button and page space
 */
 .main-content{
-    float: center;
+    float: left;
     padding-left: 45px;
     margin-top: -300px;
     background: #00aeef;
     width: 100%;
-    height: 1300px;;
+    height: 1300px;
     margin-left: 200px;
     position: relative;
 
@@ -124,6 +122,12 @@ span{
 .profile{
     background: #080339;
     color: red;
+    padding: 2%;
+    margin-left: 2%;
+    height: 100%;
+    overflow-y: scroll;
+    padding-bottom: 5%;
+    border-radius: 25px;
 }
 
 /* 
@@ -159,6 +163,7 @@ span{
     background: whitesmoke;
     height: 100%;
     padding: 5%;
+    overflow-y: scroll;
 }
 
 .form-container{
@@ -177,7 +182,7 @@ form{
     padding-top: 5%;
     padding-right: 57%;
     width: 40%;
-    background: #080339;;
+    background: #080339;
 }
 
 form ul{

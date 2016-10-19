@@ -44,13 +44,11 @@ public class Profile extends HttpServlet {
     private Cluster cluster;
     private HashMap CommandsMap = new HashMap();
     
-    
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Profile() {
-        
 
     }
 
@@ -58,29 +56,59 @@ public class Profile extends HttpServlet {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
     }
-
+    
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      * response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        //Split up each element of url and place into array e.g. abc.com[1]/images[1]/something[2]
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); //call up view UserPics jsp
-        rd.forward(request, response); //transfer control to userpics.jsp
+        
+        //Split up each element of url and place into array e.g. Instagrim[1]/Profile[1]/User[2]
+        String args[] = Convertors.SplitRequestPath(request);
+        
+        //Display Username of Profile in header from URL
+        HttpSession session=request.getSession();
+        String ProfileName = args[2];
+        session.setAttribute("ProfileName",ProfileName);
+        
+        //Take the profile name segment for the URL and pass to method which produces users picture stream
+        DisplayUserPicStream(args[2], request, response);
         
         
         
     }
-
-   
-
     
+    
+    protected void DisplayUserPicStream(String profile, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        //Model to access db
+        PicModel tm = new PicModel();
+        tm.setCluster(cluster); //tells model how to connect to db
+        
+        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(profile); //get all the pictures for profile page
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); //call up view profile jsp
+        request.setAttribute("UserPicStream", lsPics); //send list to profile.jsp
+        rd.forward(request, response); //transfer control to profile.jsp.jsp
+        
+        //call method from PicModel.java (get picture from user)
+        
+    }
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
     }
+    
+    //Error Message Method
+    private void errorMessage(String mess, HttpServletResponse response) throws ServletException, IOException {
 
+        PrintWriter out = null;
+        out = new PrintWriter(response.getOutputStream());
+        out.println("<h1>You have a an error in your input</h1>");
+        out.println("<h2>" + mess + "</h2>");
+        out.close();
+        return;
+    }
     
 }
 

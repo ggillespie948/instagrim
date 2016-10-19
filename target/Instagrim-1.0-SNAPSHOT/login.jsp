@@ -32,6 +32,7 @@
                     <h3> Login  </h3>
                     <form method="POST"  action="Login">
                     <ul>
+                        <p> ${ErrorString} </p> 
                         <li>Username <input type="text" name="username" required></li>
                         <li>Password <input type="password" name="password" required></li>
                         <br/>
@@ -69,12 +70,7 @@
                             
                         });
 
-                        var showlogin = document.getElementById("Login");
-                        showlogin.onclick = function(){
-                            
-                            return false;
-                        }
-                        
+    
         </script>
     </body>
 </html>

@@ -96,6 +96,9 @@ public class Login extends HttpServlet {
             
             
         }else{
+            
+            String error = "User and papssword do not match";
+            session.setAttribute("ErrorString",error);
             response.sendRedirect("/Instagrim/Login");
         }
         

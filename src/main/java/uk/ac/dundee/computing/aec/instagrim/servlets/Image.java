@@ -71,6 +71,7 @@ public class Image extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+        
         //Split up each element of url and place into array e.g. abc.com[1]/images[1]/something[2]
         String args[] = Convertors.SplitRequestPath(request);
         int command;
@@ -130,12 +131,17 @@ public class Image extends HttpServlet {
         out.close();
     }
 
+    //Do Post wich handles file upload
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
 
             String type = part.getContentType();
             String filename = part.getSubmittedFileName();
+            //String title = request.getParameter("title");
+            
+            //Some form of validation on title?
+            
             
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
@@ -155,7 +161,7 @@ public class Image extends HttpServlet {
 
                 is.close();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
              rd.forward(request, response);
         }
 

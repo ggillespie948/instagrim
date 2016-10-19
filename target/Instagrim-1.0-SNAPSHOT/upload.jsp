@@ -49,10 +49,17 @@
                 <div class="content">
                     <h3>File Upload</h3>
                 <form method="POST" enctype="multipart/form-data" action="Image">
-                    File to upload: <input type="file" name="upfile"><br/>
+                    <label for="upfile"> Choose File: </label>
+                    <input type="file" name="upfile">
 
                     <br/>
-                    <input type="submit" value="Press"> to upload the file!
+                    
+                    <label for="Title"> Photo Title  </label>
+                    <input type="text" name="Title" required>
+                    
+                    <br/>
+                    <label for="upPress"> Click to upload! </label>
+                    <input type="submit" value="Press" name="upPress">
                 </form>                    
                 </div>
                 
