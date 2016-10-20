@@ -48,12 +48,11 @@
                 <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
                 <div class="content">
                     <h3>File Upload</h3>
-                <form method="POST" enctype="multipart/form-data" action="Image">
+                <form method="POST" enctype="multipart/form-data" action="Image" >
                     <label for="upfile"> Choose File: </label>
                     <input type="file" name="upfile">
 
                     <br/>
-                    
                     <label for="Title"> Photo Title  </label>
                     <input type="text" name="Title" required>
                     
@@ -88,12 +87,6 @@
                             });
                             
                         });
-
-                        var showlogin = document.getElementById("Login");
-                        showlogin.onclick = function(){
-                            
-                            return false;
-                        }
                         
         </script>
     </body>

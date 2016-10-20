@@ -30,6 +30,7 @@
                 <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
                 <div class="content">
                     <h3> Login  </h3>
+                    <div class="formHolder">
                     <form method="POST"  action="Login">
                     <ul>
                         <p> ${ErrorString} </p> 
@@ -41,6 +42,9 @@
                     <br/>
                     
                     </form>
+                    </div>
+                    
+                    
 
                 </div>
                 

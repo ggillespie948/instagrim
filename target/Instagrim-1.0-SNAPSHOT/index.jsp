@@ -5,6 +5,7 @@
 --%>
 
 
+<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
 <!DOCTYPE html>
@@ -48,10 +49,31 @@
                 <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
                 <div class="content">
                     <h1>Instagrim</h1>
-                    <h2> Your Image Feed </h2>
-                    <p class="MainText"> This project serves as course work in module AC32007. 
-                    </p>
-                    <p> Please login or register to Instagrim by using the menu to the left. </p>
+                    <%
+                        if (lg != null) {
+                            if (lg.getlogedin()) {
+                    %>
+                                <h2> Your Image Feed </h2>
+                                <p class="MainText"> This project serves as course work in module AC32007. 
+                    <%  
+                                java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("AllPicStream");
+                       
+                                if(lsPics != null){
+                                //go through each pic in list
+                                    Iterator<Pic> iterator;
+                                    iterator = lsPics.iterator();
+                                
+                                    while (iterator.hasNext()) {
+                                        Pic p = (Pic) iterator.next();
+
+                    %>
+                                        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a>  
+                    <%
+                                    }
+                                }
+                            }
+                        }
+                    %>
                 </div>
                 
             </div>

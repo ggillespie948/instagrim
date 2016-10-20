@@ -62,11 +62,13 @@
                     <%--
                     
                     --%>
+                    <h2> Profile Picture: </h2>
                     <br>
                     ${ProfileName};
+                    <h2> Bio </h2>
                     Bio: This is a test area of text help to format the final website
                     <br>
-                    Everybody n the 3 1 3 put your motheruking hands up and follow meeeeeeeeeeeeeeeeeeeeeee
+                    This is template Bio text, to be added later.
                     <h2> <%= FirstName %>'s Uploads </h2>
                     <%
                         //Recieve UserPicStream from Servlet here 

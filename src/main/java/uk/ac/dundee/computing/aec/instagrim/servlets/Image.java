@@ -36,7 +36,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
     "/Image/*",
     "/Thumb/*",
     "/Images",
-    "/Images/*"
+    "/Images/*",
 })
 @MultipartConfig
 
@@ -98,13 +98,31 @@ public class Image extends HttpServlet {
     }
 
     private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PicModel tm = new PicModel();
-        tm.setCluster(cluster); //tells model how to connect to db
-        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User); //get all the pictures for User
-        RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp"); //call up view UserPics jsp
-        request.setAttribute("Pics", lsPics); //send list to Userpics.jsp
-        rd.forward(request, response); //transfer control to userpics.jsp
         
+        //get login session,
+        //if login session = String user
+        //continue else, redirect to forbidden/unauthorised message
+        HttpSession session=request.getSession();
+        LoggedIn lg= (LoggedIn)session.getAttribute("LoggedIn");
+        String currentUser = ".";
+        if (lg.getlogedin()){
+            currentUser=lg.getUsername();                
+            }
+        //Remove these when done
+        session.setAttribute("currentUser",currentUser);
+        session.setAttribute("passUser",User);
+        
+        if (currentUser.equals(User) ){
+            PicModel tm = new PicModel();
+            tm.setCluster(cluster); //tells model how to connect to db
+            java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User); //get all the pictures for User
+            RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp"); //call up view UserPics jsp
+            request.setAttribute("Pics", lsPics); //send list to Userpics.jsp
+            rd.forward(request, response); //transfer control to userpics.jsp
+        } else {
+            RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp"); //call up view UserPics jsp
+            rd.forward(request, response); //transfer control to userpics.jsp
+        }
         //call method from PicModel.java (get picture from user)
 
     }
@@ -114,7 +132,6 @@ public class Image extends HttpServlet {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
   
-        
         Pic p = tm.getPic(type,java.util.UUID.fromString(Image));
         
         OutputStream out = response.getOutputStream();
@@ -133,6 +150,7 @@ public class Image extends HttpServlet {
 
     //Do Post wich handles file upload
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
 
@@ -163,7 +181,10 @@ public class Image extends HttpServlet {
             }
             RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
              rd.forward(request, response);
+                    
         }
+        
+        
 
     }
 

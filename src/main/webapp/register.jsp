@@ -32,6 +32,7 @@
                     <div class="content-banner"> 
                         <h3> Create Your Account </h3>
                     </div>
+                    <div class="formHolder">
                     <form id="registerUser" action="Register" onsubmit="return formValidation()" method="POST">
                         <ul>
                             <label for ="username"> Username </label>
@@ -55,7 +56,9 @@
                         <input type="submit" value="Register" class="button"> 
                         </ul>
                         
-                    </form>
+                    </form>    
+                    </div>
+                    
                 </div>
                 
             </div>

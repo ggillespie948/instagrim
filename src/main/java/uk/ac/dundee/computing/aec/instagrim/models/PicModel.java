@@ -87,6 +87,20 @@ public class PicModel {
             System.out.println("Error --> " + ex);
         }
     }
+    
+    public boolean setComment(String user, String comment, String picid){
+        Session session = cluster.connect("instagrim");
+                
+        comment= "'unknown'";
+        picid= "ad5b10c0-9544-11e6-bb62-461ca8e43e4f";
+
+	String source ="update pics set comments = comments + {comment} where picid =";
+        String update = source.substring(0,39) + comment+ source.substring(46,61) +  picid+ ";";
+        
+        session.execute(update);
+        return true;
+        
+    }
 
     public byte[] picresize(String picid,String type) {
         try {
@@ -157,6 +171,32 @@ public class PicModel {
         }
         return Pics;
     }
+    
+    public java.util.LinkedList<Pic> getPicsForAll() {
+        java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select picid from userpiclist where user =?"); //select all pic id's
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        "*"));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) { //go through every row in pic list and convert to string
+                Pic pic = new Pic();
+                java.util.UUID UUID = row.getUUID("picid");
+                System.out.println("UUID" + UUID.toString());
+                pic.setUUID(UUID); 
+                Pics.add(pic);
+                //add every picture id to item in linked list
+            }
+        }
+        return Pics;
+    }
+    
 
     public Pic getPic(int image_type, java.util.UUID picid) {
         Session session = cluster.connect("instagrim");

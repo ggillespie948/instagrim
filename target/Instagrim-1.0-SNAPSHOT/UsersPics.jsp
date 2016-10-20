@@ -48,12 +48,19 @@
                 <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
                 <div class="content">
                     <h3>Your Images </h3>
+                    <div class ="profile">    
+                    
         <%
             //User pics recived by page here 
             java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
+            
+            
+            
             if (lsPics == null) {
         %>
-        <p>No Pictures found</p>
+        <p>No Pictures Found or Access Forbidden</p></br>
+        <p> User Required: </p> ${passUser}
+        <p> User Found: </p> ${currentUser}
         <%
         } else {
             //go through each pic in list
@@ -63,13 +70,19 @@
                 Pic p = (Pic) iterator.next();
 
         %>
-        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a></br><%
+        <a href="/Instagrim/Comments/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> 
+        <form action="Image" method="POST">
+            <button value=""> Make Profile Picture </button>
+            <input type="hidden" name="PictureID" value="<%=p.getSUUID()%>" required>
+        <input type="hidden" name="mess">
+        </form> </br>          
+        <%
 
             }
             }
         %>
                 </div>
-                
+                </div>
             </div>
                 
         <script>
