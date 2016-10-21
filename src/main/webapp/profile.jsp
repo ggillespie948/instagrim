@@ -63,13 +63,17 @@
                     
                     --%>
                     <h2> Profile Picture: </h2>
+                    <%
+                        Pic ProfilePicture = (Pic) request.getAttribute("ProfilePict");
+                    %>
+                    <%-- <a href="#"> <img src="/Instagrim/Thumb/<%= ProfilePictureID %>"></a> --%>
+                    <a href="#"> <img src="/Instagrim/Thumb/${ProfilePictureID}"></a>
                     <br>
-                    ${ProfileName};
-                    <h2> Bio </h2>
-                    Bio: This is a test area of text help to format the final website
+                    <h2> Bio: </h2>
+                    <p> This is a test area of text help to format the final website </p>
                     <br>
                     This is template Bio text, to be added later.
-                    <h2> <%= FirstName %>'s Uploads </h2>
+                    <h2> <%= FirstName %>'s Uploads: </h2>
                     <%
                         //Recieve UserPicStream from Servlet here 
                         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("UserPicStream");
@@ -88,7 +92,8 @@
                             Pic p = (Pic) iterator.next();
 
                         %>
-                        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a>  
+                        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a>
+                        
                         <%
                             }
                                 } %>

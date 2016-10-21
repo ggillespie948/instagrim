@@ -56,6 +56,8 @@
                     <label for="Title"> Photo Title  </label>
                     <input type="text" name="Title" required>
                     
+                    <input type="hidden" name="PostType" value="Upload">
+                    
                     <br/>
                     <label for="upPress"> Click to upload! </label>
                     <input type="submit" value="Press" name="upPress">

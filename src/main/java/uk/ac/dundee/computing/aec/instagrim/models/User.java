@@ -31,7 +31,7 @@ public class User {
     public boolean RegisterUser(String Username, String Password, String email, String Fname, String Lname){
         
          boolean isUnique = existingUserCheck(Username);
-        
+         
          if (isUnique == true){
              AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();                      
             String EncodedPassword=null;

@@ -72,6 +72,9 @@ public class Profile extends HttpServlet {
         String ProfileName = args[2];
         session.setAttribute("ProfileName",ProfileName);
         
+        //Display user profile pic
+        DisplayUserProfilePic(ProfileName, request, response);
+        
         //Take the profile name segment for the URL and pass to method which produces users picture stream
         DisplayUserPicStream(args[2], request, response);
         
@@ -100,15 +103,20 @@ public class Profile extends HttpServlet {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         
-        String Image = "nothing"; // = fetchProfilePicUUID(profile);
-        int type = 1; //Find out what this number means
+        java.util.UUID profilePicID = tm.getProfilePicID(profile);
         
-        Pic p = tm.getPic(type,java.util.UUID.fromString(Image));
         
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); //call up view profile jsp
+        
+        //Pic p = tm.getPic(0, profilePicID);
+        
+        HttpSession session=request.getSession();
+        session.setAttribute("ProfilePictureID", profilePicID);
+
         
     }
 
-    //Do post which accepts form post of profile picture from UserPics
+    //
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String PicID = request.getParameter("PictureID");
         

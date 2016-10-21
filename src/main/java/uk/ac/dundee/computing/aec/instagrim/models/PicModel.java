@@ -101,6 +101,8 @@ public class PicModel {
         return true;
         
     }
+    
+    
 
     public byte[] picresize(String picid,String type) {
         try {
@@ -145,6 +147,30 @@ public class PicModel {
         int Width=img.getWidth()-1;
         img = resize(img, Method.SPEED, Width, OP_ANTIALIAS, OP_GRAYSCALE);
         return pad(img, 4);
+    }
+   
+   public String[] getComments(String picid){
+        Session session = cluster.connect("instagrim");
+        
+        PreparedStatement ps = session.prepare("select comments from pics where picid =?"); // select all comments
+        ResultSet rs = null;
+        BoundStatement bs = new BoundStatement(ps);
+        rs = session.execute(
+                    bs.bind(
+                    picid));
+        
+        String[] picComments = new String[50];      //Define array of 50 strings (max comments number) 
+        
+        if(rs.isExhausted()){
+            System.out.println("No comments found");
+        } else {
+            for (Row row : rs) { //go through every row in pic list and convert to string
+                
+                
+            }
+        }
+        
+        return picComments;
     }
    
     public java.util.LinkedList<Pic> getPicsForUser(String User) {
@@ -252,6 +278,66 @@ public class PicModel {
 
         return p;
 
+    }
+    
+    //Method which returns a given user's profile picture
+    public java.util.UUID getProfilePicID(String user){
+        
+        Session session = cluster.connect("instagrim");
+        System.out.println("NO PROFILE 111111111 IDDDDDD *******");
+        try{
+            
+            PreparedStatement ps = null;
+            
+            ps = session.prepare("select profile_pic_id from userprofiles where login = ?");
+            
+            BoundStatement bs = new BoundStatement(ps);
+            ResultSet rs = null;
+            
+            rs = session.execute(
+                    bs.bind(
+                    user));
+            if (rs.isExhausted()){
+                // NO PROFILE PICTURE UPLOADED
+                return null;
+                
+            } else {
+                // ********************** START HERE ***************************
+                for (Row row : rs) { //convert result row to uuid
+                    java.util.UUID UUID = row.getUUID("profile_pic_id");
+                    System.out.println("PROFILE PICTURE UUID *******" + UUID.toString());
+                    
+                
+                    return UUID;
+                }
+                
+            }
+            
+            
+            
+        } catch (Exception e){
+            
+        }
+        
+        java.util.UUID picid = null;
+        
+        
+        return picid;
+        
+        
+    }
+    
+    //Method which returns a given user's profile picture
+    public boolean setProfilePicID(String user, String PicID){
+        
+        Session session = cluster.connect("instagrim");
+
+        
+        String query ="update userprofiles set profile_pic_id='' where login=";
+        String queryValues = query.substring(0,39) + PicID + query.substring(41,54) + user;
+        
+        session.execute(queryValues);
+        return true;
     }
 
 }

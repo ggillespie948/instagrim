@@ -51,7 +51,7 @@
                     <div class ="profile">    
                     
         <%
-            //User pics recived by page here 
+            // List of User pics recived by page here 
             java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
             
             
@@ -74,7 +74,7 @@
         <form action="Image" method="POST">
             <button value=""> Make Profile Picture </button>
             <input type="hidden" name="PictureID" value="<%=p.getSUUID()%>" required>
-        <input type="hidden" name="mess">
+            <input type="hidden" name="PostType" value="ProfilePicture">
         </form> </br>          
         <%
 

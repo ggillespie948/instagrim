@@ -108,6 +108,7 @@ public class Image extends HttpServlet {
         if (lg.getlogedin()){
             currentUser=lg.getUsername();                
             }
+        
         //Remove these when done
         session.setAttribute("currentUser",currentUser);
         session.setAttribute("passUser",User);
@@ -151,7 +152,34 @@ public class Image extends HttpServlet {
     //Do Post wich handles file upload
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        for (Part part : request.getParts()) {
+        String PostType = request.getParameter("PostType");
+        
+        if(PostType.equals("ProfilePicture")){
+            
+            String picUUID = request.getParameter("PictureID");
+            
+            HttpSession session=request.getSession();
+            LoggedIn lg= (LoggedIn)session.getAttribute("LoggedIn");
+            String currentUser = ".";
+            if (lg.getlogedin()){
+                currentUser=lg.getUsername();                
+            }
+            
+            String user = "'"+currentUser+"'";
+            
+            //Pass User and PictureID to Set Profile Picture Method
+            PicModel tm = new PicModel();
+                tm.setCluster(cluster);
+                tm.setProfilePicID(user, picUUID);
+             
+             
+             response.sendRedirect("/Instagrim/Profile/" + currentUser);      
+             
+                       
+            
+            
+        } else {
+            for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
 
             String type = part.getContentType();
@@ -179,11 +207,12 @@ public class Image extends HttpServlet {
 
                 is.close();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
-             rd.forward(request, response);
+            
+             response.sendRedirect("/Instagrim/Profile/" + username);
                     
+            }
+            
         }
-        
         
 
     }
