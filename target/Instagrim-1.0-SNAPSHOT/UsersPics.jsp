@@ -23,7 +23,7 @@
             </div>
             <div id="sidebar">
                 <ul>
-                     <%
+                    <%
                         LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
                         if (lg != null) {
                             String UserName = lg.getUsername();
@@ -32,89 +32,89 @@
                     <li><a href="/Instagrim/Upload">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
                     <li><a href="/Instagrim/Profile/<%=lg.getUsername()%>">Your Profile</a></li>
-                    <li><a href="${pageContext.request.contextPath}/logout.jsp">Sign Out</a></li>
-                    <%}
-                            }else{
-                                        %>
+                    <li><a href="/Instagrim/Logout">Sign Out</a></li>
+                        <%}
+                        } else {
+                        %>
                     <li><a href="login.jsp">Login</a></li>
                     <li><a href="register.jsp">Register</a></li>
-                    <%
-                            
+                        <%
                         }%>
                 </ul>
             </div>
         </div>
-            <div class="main-content">
-                <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
-                <div class="content">
-                    <h3>Your Images </h3>
-                    <div class ="profile">    
-                    
-        <%
-            //User pics recived by page here 
-            java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
-            
-            
-            
-            if (lsPics == null) {
-        %>
-        <p>No Pictures Found or Access Forbidden</p></br>
-        <p> User Required: </p> ${passUser}
-        <p> User Found: </p> ${currentUser}
-        <%
-        } else {
-            //go through each pic in list
-            Iterator<Pic> iterator;
-            iterator = lsPics.iterator();
-            while (iterator.hasNext()) {
-                Pic p = (Pic) iterator.next();
+        <div class="main-content">
+            <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
+            <div class="content">
+                <h3>Your Images </h3>
+                <div class ="profile">    
 
-        %>
-        <a href="/Instagrim/Comments/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> 
-        <form action="Image" method="POST">
-            <button value=""> Make Profile Picture </button>
-            <input type="hidden" name="PictureID" value="<%=p.getSUUID()%>" required>
-        <input type="hidden" name="mess">
-        </form> </br>          
-        <%
+                    <%
+                        // List of User pics recived by page here 
+                        java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
 
-            }
-            }
-        %>
-                </div>
+                        if (lsPics == null) {
+                    %>
+                    <p>No Pictures Found or Access Forbidden</p></br>
+                    <p> User Required: </p> ${passUser}
+                    <p> User Found: </p> ${currentUser}
+                    <%
+                    } else {
+                        //go through each pic in list
+                        Iterator<Pic> iterator;
+                        iterator = lsPics.iterator();
+                        while (iterator.hasNext()) {
+                            Pic p = (Pic) iterator.next();
+
+                    %>
+                    <a href="/Instagrim/Comments/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> 
+                    <form action="Image" method="POST">
+                        <button value="" class="button2"> Make Profile Picture </button>
+                        <button value="" class="button2"> Delete </button>
+                        <button value="" class="button2"> View Comments </button>
+                        <input type="hidden" name="PictureID" value="<%=p.getSUUID()%>" required>
+                        <input type="hidden" name="PostType" value="ProfilePicture">
+                    </form>
+
+                    </br>          
+                    <%
+                            }
+                        }
+                    %>
                 </div>
             </div>
-                
-        <script>
-                        $(document).ready(function(){
-                            $("button").click(function(){
-                                
-                                var elem = document.getElementById("sidebar-toggle");
-                                if(elem.textContent == ">"){
-                                    
-                                    $(".main-content").animate({
-                                    'marginLeft': '+=200px'}, 500);
-            
-                                    elem.textContent = "<";
-                                    
-                                } else {
-                                                                       
-                                    $(".main-content").animate({
-                                    'marginLeft': '-=200px'}, 500);
-                                    
-                                    elem.textContent = ">";
-                                }
-                                                                                                
-                            });
-                            
-                        });
+        </div>
 
-                        var showlogin = document.getElementById("Login");
-                        showlogin.onclick = function(){
-                            
-                            return false;
-                        }
-                        
+        <script>
+            $(document).ready(function () {
+                $("button").click(function () {
+
+                    var elem = document.getElementById("sidebar-toggle");
+                    if (elem.textContent == ">") {
+
+                        $(".main-content").animate({
+                            'marginLeft': '+=200px'}, 500);
+
+                        elem.textContent = "<";
+
+                    } else {
+
+                        $(".main-content").animate({
+                            'marginLeft': '-=200px'}, 500);
+
+                        elem.textContent = ">";
+                    }
+
+                });
+
+            });
+
+            var showlogin = document.getElementById("Login");
+            showlogin.onclick = function () {
+
+                return false;
+            }
+
         </script>
     </body>
 </html>

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.BoundStatement;
@@ -33,7 +32,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
 
-    Cluster cluster=null;
+    Cluster cluster = null;
 
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
@@ -51,61 +50,44 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username=request.getParameter("username");
-        String password=request.getParameter("password");
-        
-        
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
         //User Model
-        User us=new User();
+        User us = new User();
         us.setCluster(cluster);
-        boolean isValid=us.IsValidUser(username, password); //method that checks if user is valid
-        HttpSession session=request.getSession();
-        System.out.println("Session in servlet "+session);
-        
-        if (isValid){
-            LoggedIn lg= new LoggedIn();
+        boolean isValid = us.IsValidUser(username, password); //method that checks if user is valid
+        HttpSession session = request.getSession();
+        System.out.println("Session in servlet " + session);
+
+        if (isValid) {
+            LoggedIn lg = new LoggedIn();
             lg.setLogedin();
             lg.setUsername(username);
+
+            //Get first name of account
+            String fName = us.getFirstName(username);
+            lg.setFname(fName);
             
             
-            //Retrieve First Name of Account
-            Session sessionCQL = cluster.connect("instagrim");
-            PreparedStatement ps;
-            ps = sessionCQL.prepare("select first_name from userprofiles where login =?");
-            
-            ResultSet rs = null;
-            BoundStatement boundStatement = new BoundStatement(ps);
-            rs = sessionCQL.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        username));
-            for (Row row : rs) {
-                String First_Name = row.getString("first_name");
-                lg.setFname(First_Name);
-            }
-        
-            
-            //lg.setLname(lname);
             //request.setAttribute("LoggedIn", lg);
-            
             session.setAttribute("LoggedIn", lg); //contains information on logged in status
-            System.out.println("Session in servlet "+session);
-            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-	    rd.forward(request,response);
-            
-            
-        }else{
-            
-            String error = "User and papssword do not match";
-            session.setAttribute("ErrorString",error);
+            System.out.println("Session in servlet " + session);
+            response.sendRedirect("/Instagrim/");
+
+        } else {
+            //Transfer error message back to login page
+            String error = "Username and password do not match";
+            session.setAttribute("ErrorString", error);
             response.sendRedirect("/Instagrim/Login");
         }
-        
+
     }
-    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        
+
         RequestDispatcher rd = request.getRequestDispatcher("/login.jsp"); //call up view login jsp
         rd.forward(request, response); //transfer control to login.jsp
     }

@@ -49,37 +49,38 @@ public class PicModel {
     public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
-    
+
     //add picture to database
-    public void insertPic(byte[] b, String type, String name, String user) {
+    public void insertPic(byte[] b, String type, String name, String user, String title) {
         try {
             Convertors convertor = new Convertors();
 
-            String types[]=Convertors.SplitFiletype(type);
+            String types[] = Convertors.SplitFiletype(type);
             ByteBuffer buffer = ByteBuffer.wrap(b);
             int length = b.length;
             java.util.UUID picid = convertor.getTimeUUID();
-            
+
             //The following is a quick and dirty way of doing this, will fill the disk quickly !
             Boolean success = (new File("/var/tmp/instagrim/")).mkdirs();
             FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/" + picid));
 
             output.write(b);
-            byte []  thumbb = picresize(picid.toString(),types[1]);
-            int thumblength= thumbb.length;
-            ByteBuffer thumbbuf=ByteBuffer.wrap(thumbb);
-            byte[] processedb = picdecolour(picid.toString(),types[1]);
-            ByteBuffer processedbuf=ByteBuffer.wrap(processedb);
-            int processedlength=processedb.length;
+            byte[] thumbb = picresize(picid.toString(), types[1]);
+            int thumblength = thumbb.length;
+            ByteBuffer thumbbuf = ByteBuffer.wrap(thumbb);
+            byte[] processedb = picdecolour(picid.toString(), types[1]);
+            ByteBuffer processedbuf = ByteBuffer.wrap(processedb);
+            int processedlength = processedb.length;
+
             Session session = cluster.connect("instagrim");
 
-            PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name,title) values(?,?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertPicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
             BoundStatement bsInsertPic = new BoundStatement(psInsertPic);
             BoundStatement bsInsertPicToUser = new BoundStatement(psInsertPicToUser);
 
             Date DateAdded = new Date();
-            session.execute(bsInsertPic.bind(picid, buffer, thumbbuf,processedbuf, user, DateAdded, length,thumblength,processedlength, type, name));
+            session.execute(bsInsertPic.bind(picid, buffer, thumbbuf, processedbuf, user, DateAdded, length, thumblength, processedlength, type, name, title));
             session.execute(bsInsertPicToUser.bind(picid, user, DateAdded));
             session.close();
 
@@ -87,29 +88,31 @@ public class PicModel {
             System.out.println("Error --> " + ex);
         }
     }
-    
-    public boolean setComment(String user, String comment, String picid){
-        Session session = cluster.connect("instagrim");
-                
-        comment= "'unknown'";
-        picid= "ad5b10c0-9544-11e6-bb62-461ca8e43e4f";
 
-	String source ="update pics set comments = comments + {comment} where picid =";
-        String update = source.substring(0,39) + comment+ source.substring(46,61) +  picid+ ";";
+    public boolean setComment(String comment, java.util.UUID picuuid) {
+        Session session = cluster.connect("instagrim");
+
+        comment = "'"+comment+"'";
         
+        String picid = picuuid.toString();
+        
+
+        String source = "update pics set piccomments = piccomments + [comment] where picid =";
+        String update = source.substring(0,45) + comment+ source.substring(52,67) +  picid+ ";";
+
         session.execute(update);
         return true;
-        
+
     }
 
-    public byte[] picresize(String picid,String type) {
+    public byte[] picresize(String picid, String type) {
         try {
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
             BufferedImage thumbnail = createThumbnail(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(thumbnail, type, baos);
             baos.flush();
-            
+
             byte[] imageInByte = baos.toByteArray();
             baos.close();
             return imageInByte;
@@ -118,8 +121,8 @@ public class PicModel {
         }
         return null;
     }
-    
-    public byte[] picdecolour(String picid,String type) {
+
+    public byte[] picdecolour(String picid, String type) {
         try {
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
             BufferedImage processed = createProcessed(BI);
@@ -140,13 +143,41 @@ public class PicModel {
         // Let's add a little border before we return result.
         return pad(img, 2);
     }
-    
-   public static BufferedImage createProcessed(BufferedImage img) {
-        int Width=img.getWidth()-1;
+
+    public static BufferedImage createProcessed(BufferedImage img) {
+        int Width = img.getWidth() - 1;
         img = resize(img, Method.SPEED, Width, OP_ANTIALIAS, OP_GRAYSCALE);
         return pad(img, 4);
     }
-   
+
+    public java.util.List<String> getComments(java.util.UUID picid) {
+        Session session = cluster.connect("instagrim");
+
+        System.out.println("**** ***** **** **** ** cOMMENT:");
+        System.out.println(picid);
+
+        PreparedStatement ps = session.prepare("select piccomments from pics where picid =?"); // select all comments
+        ResultSet rs = null;
+        BoundStatement bs = new BoundStatement(ps);
+        rs = session.execute(
+                bs.bind(
+                        picid));
+
+        if (rs.isExhausted()) {
+            System.out.println("No comments found");
+        } else {
+            for (Row row : rs) { //go through every row in pic list and convert to string
+                java.util.List<String> comments = row.getList("piccomments", String.class);
+
+                System.out.println("**** ***** **** **** ** cOMMENT:" + comments);
+                //Add comment to Comments
+                return comments;
+            }
+        }
+
+        return null;
+    }
+
     public java.util.LinkedList<Pic> getPicsForUser(String User) {
         java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
         Session session = cluster.connect("instagrim");
@@ -164,14 +195,14 @@ public class PicModel {
                 Pic pic = new Pic();
                 java.util.UUID UUID = row.getUUID("picid");
                 System.out.println("UUID" + UUID.toString());
-                pic.setUUID(UUID); 
+                pic.setUUID(UUID);
                 Pics.add(pic);
                 //add every picture id to item in linked list
             }
         }
         return Pics;
     }
-    
+
     public java.util.LinkedList<Pic> getPicsForAll() {
         java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
         Session session = cluster.connect("instagrim");
@@ -189,14 +220,13 @@ public class PicModel {
                 Pic pic = new Pic();
                 java.util.UUID UUID = row.getUUID("picid");
                 System.out.println("UUID" + UUID.toString());
-                pic.setUUID(UUID); 
+                pic.setUUID(UUID);
                 Pics.add(pic);
                 //add every picture id to item in linked list
             }
         }
         return Pics;
     }
-    
 
     public Pic getPic(int image_type, java.util.UUID picid) {
         Session session = cluster.connect("instagrim");
@@ -207,9 +237,9 @@ public class PicModel {
             Convertors convertor = new Convertors();
             ResultSet rs = null;
             PreparedStatement ps = null;
-         
+
             if (image_type == Convertors.DISPLAY_IMAGE) {
-                
+
                 ps = session.prepare("select image,imagelength,type from pics where picid =?");
             } else if (image_type == Convertors.DISPLAY_THUMB) {
                 ps = session.prepare("select thumb,imagelength,thumblength,type from pics where picid =?");
@@ -232,12 +262,12 @@ public class PicModel {
                     } else if (image_type == Convertors.DISPLAY_THUMB) {
                         bImage = row.getBytes("thumb");
                         length = row.getInt("thumblength");
-                
+
                     } else if (image_type == Convertors.DISPLAY_PROCESSED) {
                         bImage = row.getBytes("processed");
                         length = row.getInt("processedlength");
                     }
-                    
+
                     type = row.getString("type");
 
                 }
@@ -254,4 +284,86 @@ public class PicModel {
 
     }
 
+    //Method which returns a given user's profile picture
+    public java.util.UUID getProfilePicID(String user) {
+
+        Session session = cluster.connect("instagrim");
+        System.out.println("NO PROFILE 111111111 IDDDDDD *******");
+        try {
+
+            PreparedStatement ps = null;
+
+            ps = session.prepare("select profile_pic_id from userprofiles where login = ?");
+
+            BoundStatement bs = new BoundStatement(ps);
+            ResultSet rs = null;
+
+            rs = session.execute(
+                    bs.bind(
+                            user));
+            if (rs.isExhausted()) {
+                // NO PROFILE PICTURE UPLOADED
+                return null;
+
+            } else {
+                // ********************** START HERE ***************************
+                for (Row row : rs) { //convert result row to uuid
+                    java.util.UUID UUID = row.getUUID("profile_pic_id");
+                    System.out.println("PROFILE PICTURE UUID *******" + UUID.toString());
+
+                    return UUID;
+                }
+
+            }
+
+        } catch (Exception e) {
+
+        }
+
+        java.util.UUID picid = null;
+
+        return picid;
+    }
+
+    public String getPicTitle(java.util.UUID picid) {
+
+        Session session = cluster.connect("instagrim");
+
+        try {
+            PreparedStatement ps = null;
+            ps = session.prepare("select title from pics where picid =?");
+            BoundStatement bs = new BoundStatement(ps);
+
+            ResultSet rs = null;
+
+            rs = session.execute(
+                    bs.bind(
+                            picid));
+
+            for (Row row : rs) {//convert result row to uuid
+                String title = row.toString();
+
+                return title;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Exception: selecting title");
+        }
+
+        return null;
+    }
+
+    //Method which returns a given user's profile picture
+    public boolean setProfilePicID(String user, String PicID) {
+
+        Session session = cluster.connect("instagrim");
+
+        String query = "update userprofiles set profile_pic_id='' where login=";
+        String queryValues = query.substring(0, 39) + PicID + query.substring(41, 54) + user;
+
+        session.execute(queryValues);
+        return true;
+    }
+
+    //public String getPicTitle
 }

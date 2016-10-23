@@ -26,13 +26,13 @@
                 </ul>
             </div>
         </div>
-            <div class="main-content">
-                <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
-                <div class="content">
-                    <div class="content-banner"> 
-                        <h3> Create Your Account </h3>
-                    </div>
-                    <div class="formHolder">
+        <div class="main-content">
+            <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
+            <div class="content">
+                <div class="content-banner"> 
+                    <h3> Create Your Account </h3>
+                </div>
+                <div class="formHolder">
                     <form id="registerUser" action="Register" onsubmit="return formValidation()" method="POST">
                         <ul>
                             <label for ="username"> Username </label>
@@ -53,93 +53,93 @@
                             <label for="last-name"> Last Name  </label>
                             <li><input type="text" name="last-name" required></li>
                             <br/>
-                        <input type="submit" value="Register" class="button"> 
+                            <input type="submit" value="Register" class="button"> 
                         </ul>
-                        
+
                     </form>    
-                    </div>
-                    
                 </div>
-                
+
             </div>
-                
+
+        </div>
+
         <script type="text/javascript">
             //Script for sliding menu
-                $(document).ready(function(){
-                    $("button").click(function(){
-                               
-                        var elem = document.getElementById("sidebar-toggle");
-                        if(elem.textContent == ">"){
-                                    
-                            $(".main-content").animate({
-                                'marginLeft': '+=200px'}, 500);
-            
-                            elem.textContent = "<";
-                                    
-                        } else {
-                                                                       
-                            $(".main-content").animate({
-                                'marginLeft': '-=200px'}, 500);
-                                    
-                            elem.textContent = ">";
-                            
-                        }
-                        
-                        
-                                                                                                
-                    });
+            $(document).ready(function () {
+                $("button").click(function () {
+
+                    var elem = document.getElementById("sidebar-toggle");
+                    if (elem.textContent == ">") {
+
+                        $(".main-content").animate({
+                            'marginLeft': '+=200px'}, 500);
+
+                        elem.textContent = "<";
+
+                    } else {
+
+                        $(".main-content").animate({
+                            'marginLeft': '-=200px'}, 500);
+
+                        elem.textContent = ">";
+
+                    }
+
+
+
                 });
-                                            
+            });
+
             //Client-side form validation for username and confirm password
-            function formValidation(){
+            function formValidation() {
                 var uservar = document.getElementsByName("username");
                 var passvar = document.getElementsByName("password");
                 var confirmpassvar = document.getElementsByName("confirmpassword");
-                
-                
+
+
                 var isValid = true;
-                
-                if (uservar[0].value.match(/[^a-z0-9]/i)){
+
+                if (uservar[0].value.match(/[^a-z0-9]/i)) {
                     document.getElementById("usernameErrorMsg").innerHTML = "User name must consist of letters and digits [a-z] [0-9].";
                     isValid = false;
                 } else {
                     document.getElementById("usernameErrorMsg").innerHTML = "";
                 }
-                
-                if (!uservar[0].value.match(/[a-z]/i)){
+
+                if (!uservar[0].value.match(/[a-z]/i)) {
                     document.getElementById("usernameErrorMsg").innerHTML = "Username must consist of at least one letter.";
                     isValid = false;
                 } else {
                     document.getElementById("usernameErrorMsg").innerHTML = "";
                 }
-                
-                if (passvar[0].value.length < 5){
+
+                if (passvar[0].value.length < 5) {
                     document.getElementById("passwordErrorMsg").innerHTML = "Password must be atleast 5 characters in length.";
                     isValid = false;
                 } else {
                     document.getElementById("passwordErrorMsg").innerHTML = "";
-                    
+
                 }
-                
+
                 var passcheck = passvar[0].value.localeCompare(confirmpassvar[0].value);
-                
-                if(passcheck !== 0){
+
+                if (passcheck !== 0) {
                     document.getElementById("confirmpasswordErrorMsg").innerHTML = "Passwords do not match.";
                     isValid = false;
                 } else {
                     document.getElementById("confirmpasswordErrorMsg").innerHTML = ""
                 }
-                    
-                
-                if (isValid === true){
+
+
+                if (isValid === true) {
                     return true;
                 } else {
                     return false;
                 }
-                
-                
+
+
             }
-                        
+
         </script>
     </body>
 </html>

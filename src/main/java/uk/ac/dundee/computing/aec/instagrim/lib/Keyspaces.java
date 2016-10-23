@@ -18,6 +18,7 @@ public final class Keyspaces {
             String CreatePicTable = "CREATE TABLE if not exists instagrim.Pics ("
                     + " user varchar,"
                     + " picid uuid, "
+                    + " comments list<text>,"
                     + " interaction_time timestamp,"
                     + " title varchar,"
                     + " image blob,"

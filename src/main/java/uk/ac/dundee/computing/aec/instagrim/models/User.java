@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.dundee.computing.aec.instagrim.models;
 
 import com.datastax.driver.core.BoundStatement;
@@ -22,70 +21,64 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
  * @author Administrator
  */
 public class User {
+
     Cluster cluster;
-    public User(){
-        
+
+    public User() {
+
     }
-    
+
     //Reigster user 
-    public boolean RegisterUser(String Username, String Password, String email, String Fname, String Lname){
-        
-         boolean isUnique = existingUserCheck(Username);
-        
-         if (isUnique == true){
-             AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();                      
-            String EncodedPassword=null;
-        try {
-            EncodedPassword= sha1handler.SHA1(Password);                        //encrypt password
-        }catch (UnsupportedEncodingException | NoSuchAlgorithmException et){
-            System.out.println("Can't check your password");
+    public boolean RegisterUser(String Username, String Password, String email, String Fname, String Lname) {
+
+        boolean isUnique = existingUserCheck(Username);
+
+        if (isUnique == true) {
+            AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
+            String EncodedPassword = null;
+            try {
+                EncodedPassword = sha1handler.SHA1(Password);                        //encrypt password
+            } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
+                System.out.println("Can't check your password");
+                return false;
+            }
+            Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("insert into userprofiles (login,first_name,last_name,password) Values(?, ?, ?, ?)");
+            BoundStatement boundStatement = new BoundStatement(ps);
+            try {
+                session.execute( // this is where the query is executed
+                        boundStatement.bind( // here you are binding the 'boundStatement'
+                                Username, Fname, Lname, EncodedPassword));                                     //try execute statement
+
+                //We are assuming this always works.  Also a transaction would be good here !
+                return true;
+
+            } catch (Exception e) {
+                System.out.println("EXCEPTION EXECUTING QUERY: " + e.getMessage());
+                return false;
+            }
+
+        } else {
+            //Else username is not unique
             return false;
         }
-         
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("insert into userprofiles (login,first_name,last_name,password) Values(?, ?, ?, ?)");
-        BoundStatement boundStatement = new BoundStatement(ps);        
-        
-        
-        
-        try{
-            session.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        Username,Fname,Lname,EncodedPassword));                                     //try execute statement
-            
-            //We are assuming this always works.  Also a transaction would be good here !
-            return true;
-            
-        }catch (Exception e){
-            System.out.println("EXCEPTION EXECUTING QUERY: " + e.getMessage());
-            return false;
-        }
-        
-        
-             
-             
-         } else {
-             //Else username is not unique
-             return false;
-         }
-        
-        
+
     }
-    
+
     //Method which searches cassandra for a given username, returning true if the username is unique and false if it already exists in the database.
-    public boolean existingUserCheck(String username){
-        
+    public boolean existingUserCheck(String username) {
+
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("select login from userprofiles where login =?");
-        
+
         ResultSet rs = null;
         BoundStatement boundstatement = new BoundStatement(ps);
-        
+
         rs = session.execute(
                 boundstatement.bind(
                         username));
-        
-        if(rs.isExhausted()) {
+
+        if (rs.isExhausted()) {
             //No existing username found, success!
             return true;
         } else {
@@ -93,14 +86,14 @@ public class User {
             return false;
         }
     }
-    
+
     //Check if user credentials are valid
-    public boolean IsValidUser(String username, String Password){
-        AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
-        String EncodedPassword=null;
+    public boolean IsValidUser(String username, String Password) {
+        AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
+        String EncodedPassword = null;
         try {
-            EncodedPassword= sha1handler.SHA1(Password);
-        }catch (UnsupportedEncodingException | NoSuchAlgorithmException et){
+            EncodedPassword = sha1handler.SHA1(Password);
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
             System.out.println("Can't check your password");
             return false;
         }
@@ -116,20 +109,41 @@ public class User {
             return false;
         } else {
             for (Row row : rs) {
-               
+
                 String StoredPass = row.getString("password");
-                if (StoredPass.compareTo(EncodedPassword) == 0)
+                if (StoredPass.compareTo(EncodedPassword) == 0) {
                     return true;
+                }
             }
         }
-        
-        return false;  
+
+        return false;
     }
-    
-    
+
+    public String getFirstName(String username) {
+
+        //Retrieve First Name of Account
+        Session sessionCQL = cluster.connect("instagrim");
+        PreparedStatement ps;
+        ps = sessionCQL.prepare("select first_name from userprofiles where login =?");
+
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = sessionCQL.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+
+        for (Row row : rs) {
+            String First_Name = row.getString("first_name");
+            System.out.print("8888888888" + "  " + First_Name);
+            return First_Name;
+        }
+
+        return "Error";
+    }
+
     public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
 
-    
 }

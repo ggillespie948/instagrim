@@ -36,8 +36,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
     "/Image/*",
     "/Thumb/*",
     "/Images",
-    "/Images/*",
-})
+    "/Images/*",})
 @MultipartConfig
 
 public class Image extends HttpServlet {
@@ -45,8 +44,6 @@ public class Image extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Cluster cluster;
     private HashMap CommandsMap = new HashMap();
-    
-    
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -71,7 +68,7 @@ public class Image extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        
+
         //Split up each element of url and place into array e.g. abc.com[1]/images[1]/something[2]
         String args[] = Convertors.SplitRequestPath(request);
         int command;
@@ -84,13 +81,13 @@ public class Image extends HttpServlet {
         }
         switch (command) {
             case 1:
-                DisplayImage(Convertors.DISPLAY_PROCESSED,args[2], response);
+                DisplayImage(Convertors.DISPLAY_PROCESSED, args[2], response);
                 break;
             case 2:
                 DisplayImageList(args[2], request, response);
                 break;
             case 3:
-                DisplayImage(Convertors.DISPLAY_THUMB,args[2],  response);
+                DisplayImage(Convertors.DISPLAY_THUMB, args[2], response);
                 break;
             default:
                 error("Bad Operator", response);
@@ -98,21 +95,22 @@ public class Image extends HttpServlet {
     }
 
     private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         //get login session,
         //if login session = String user
         //continue else, redirect to forbidden/unauthorised message
-        HttpSession session=request.getSession();
-        LoggedIn lg= (LoggedIn)session.getAttribute("LoggedIn");
+        HttpSession session = request.getSession();
+        LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
         String currentUser = ".";
-        if (lg.getlogedin()){
-            currentUser=lg.getUsername();                
-            }
+        if (lg.getlogedin()) {
+            currentUser = lg.getUsername();
+        }
+
         //Remove these when done
-        session.setAttribute("currentUser",currentUser);
-        session.setAttribute("passUser",User);
-        
-        if (currentUser.equals(User) ){
+        session.setAttribute("currentUser", currentUser);
+        session.setAttribute("passUser", User);
+
+        if (currentUser.equals(User)) {
             PicModel tm = new PicModel();
             tm.setCluster(cluster); //tells model how to connect to db
             java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User); //get all the pictures for User
@@ -127,13 +125,13 @@ public class Image extends HttpServlet {
 
     }
 
-    private void DisplayImage(int type,String Image, HttpServletResponse response) throws ServletException, IOException {
-        
+    private void DisplayImage(int type, String Image, HttpServletResponse response) throws ServletException, IOException {
+
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
-  
-        Pic p = tm.getPic(type,java.util.UUID.fromString(Image));
-        
+
+        Pic p = tm.getPic(type, java.util.UUID.fromString(Image));
+
         OutputStream out = response.getOutputStream();
 
         response.setContentType(p.getType());
@@ -150,41 +148,64 @@ public class Image extends HttpServlet {
 
     //Do Post wich handles file upload
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        for (Part part : request.getParts()) {
-            System.out.println("Part Name " + part.getName());
 
-            String type = part.getContentType();
-            String filename = part.getSubmittedFileName();
-            //String title = request.getParameter("title");
-            
-            //Some form of validation on title?
-            
-            
-            InputStream is = request.getPart(part.getName()).getInputStream();
-            int i = is.available();
-            HttpSession session=request.getSession();
-            LoggedIn lg= (LoggedIn)session.getAttribute("LoggedIn");
-            String username="majed";
-            if (lg.getlogedin()){
-                username=lg.getUsername();
-            }
-            if (i > 0) {
-                byte[] b = new byte[i + 1];
-                is.read(b);
-                System.out.println("Length : " + b.length);
-                PicModel tm = new PicModel();
-                tm.setCluster(cluster);
-                tm.insertPic(b, type, filename, username);
+        String PostType = request.getParameter("PostType");
 
-                is.close();
+        if (PostType.equals("ProfilePicture")) {
+
+            String picUUID = request.getParameter("PictureID");
+
+            HttpSession session = request.getSession();
+            LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+            String currentUser = ".";
+            if (lg.getlogedin()) {
+                currentUser = lg.getUsername();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
-             rd.forward(request, response);
-                    
+
+            String user = "'" + currentUser + "'";
+
+            //Pass User and PictureID to Set Profile Picture Method
+            PicModel tm = new PicModel();
+            tm.setCluster(cluster);
+            tm.setProfilePicID(user, picUUID);
+
+            response.sendRedirect("/Instagrim/Profile/" + currentUser);
+
+        } else {
+            for (Part part : request.getParts()) {
+                System.out.println("Part Name " + part.getName());
+
+                String type = part.getContentType();
+                String filename = part.getSubmittedFileName();
+
+                String title = request.getParameter("Title");
+
+                //Some form of validation on title?
+                InputStream is = request.getPart(part.getName()).getInputStream();
+                int i = is.available();
+                HttpSession session = request.getSession();
+                LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+                String username = "majed";
+                if (lg.getlogedin()) {
+                    username = lg.getUsername();
+                }
+                if (i > 0) {
+                    byte[] b = new byte[i + 1];
+                    is.read(b);
+                    System.out.println("Length : " + b.length);
+                    PicModel tm = new PicModel();
+                    tm.setCluster(cluster);
+                    tm.insertPic(b, type, filename, username, title);
+
+                    is.close();
+                }
+                
+                response.sendRedirect("/Instagrim/");
+                //response.sendRedirect("/Instagrim/Profile/" + username);
+
+            }
+
         }
-        
-        
 
     }
 

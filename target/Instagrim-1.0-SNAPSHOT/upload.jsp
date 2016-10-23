@@ -23,71 +23,76 @@
             </div>
             <div id="sidebar">
                 <ul>
-                     <%
+                    <%
                         LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
                         if (lg != null) {
                             String UserName = lg.getUsername();
                             if (lg.getlogedin()) {
                     %>
-                    <li><a href="${pageContext.request.contextPath}/upload.jsp">Upload</a></li>
+                    <li><a href="/Instagrim/Upload">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
                     <li><a href="/Instagrim/Profile/<%=lg.getUsername()%>">Your Profile</a></li>
-                    <li><a href="${pageContext.request.contextPath}/logout.jsp">Sign Out</a></li>
-                    <%}
-                            }else{
-                                        %>
+                    <li><a href="/Instagrim/Logout">Sign Out</a></li>
+                        <%}
+                        } else {
+                        %>
                     <li><a href="login.jsp">Login</a></li>
                     <li><a href="register.jsp">Register</a></li>
-                    <%
-                            
+                        <%
                         }%>
                 </ul>
             </div>
         </div>
-            <div class="main-content">
-                <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
-                <div class="content">
-                    <h3>File Upload</h3>
-                <form method="POST" enctype="multipart/form-data" action="Image" >
-                    <label for="upfile"> Choose File: </label>
-                    <input type="file" name="upfile">
+        <div class="main-content">
+            <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
+            <div class="content">
+                <h3>File Upload</h3>
+                <div class="profile"> 
+                    <form method="POST" enctype="multipart/form-data" action="Image" >
+                        <label for="upfile"> Choose File: </label>
+                        <input type="file" name="upfile">
 
-                    <br/>
-                    <label for="Title"> Photo Title  </label>
-                    <input type="text" name="Title" required>
-                    
-                    <br/>
-                    <label for="upPress"> Click to upload! </label>
-                    <input type="submit" value="Press" name="upPress">
-                </form>                    
+                        <br/>
+                        <label for="Title"> Photo Title  </label>
+                        <input type="text" name="Title" required>
+
+                        <input type="hidden" name="PostType" value="Upload">
+
+                        <br/>
+                        <label for="upPress"> Click to upload! </label>
+                        <input type="submit" value="Press" name="upPress">
+                    </form>
+
                 </div>
-                
+
             </div>
-                
+
+        </div>
+
         <script>
-                        $(document).ready(function(){
-                            $("button").click(function(){
-                                
-                                var elem = document.getElementById("sidebar-toggle");
-                                if(elem.textContent == ">"){
-                                    
-                                    $(".main-content").animate({
-                                    'marginLeft': '+=200px'}, 500);
-            
-                                    elem.textContent = "<";
-                                    
-                                } else {
-                                                                       
-                                    $(".main-content").animate({
-                                    'marginLeft': '-=200px'}, 500);
-                                    
-                                    elem.textContent = ">";
-                                }
-                                                                                                
-                            });
-                            
-                        });
-                        
+            $(document).ready(function () {
+                $("button").click(function () {
+
+                    var elem = document.getElementById("sidebar-toggle");
+                    if (elem.textContent == ">") {
+
+                        $(".main-content").animate({
+                            'marginLeft': '+=200px'}, 500);
+
+                        elem.textContent = "<";
+
+                    } else {
+
+                        $(".main-content").animate({
+                            'marginLeft': '-=200px'}, 500);
+
+                        elem.textContent = ">";
+                    }
+
+                });
+
+            });
+
         </script>
     </body>
 </html>

@@ -26,55 +26,55 @@
                 </ul>
             </div>
         </div>
-            <div class="main-content">
-                <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
-                <div class="content">
-                    <h3> Login  </h3>
-                    <div class="formHolder">
+        <div class="main-content">
+            <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
+            <div class="content">
+                <h3> Login  </h3>
+                <div class="formHolder">
                     <form method="POST"  action="Login">
-                    <ul>
-                        <p> ${ErrorString} </p> 
-                        <li>Username <input type="text" name="username" required></li>
-                        <li>Password <input type="password" name="password" required></li>
+                        <ul>
+                            <p> ${ErrorString} </p> 
+                            <li>Username <input type="text" name="username" required></li>
+                            <li>Password <input type="password" name="password" required></li>
+                            <br/>
+                            <input type="submit" value="Login" class="button"> 
+                        </ul>
                         <br/>
-                        <input type="submit" value="Login" class="button"> 
-                    </ul>
-                    <br/>
-                    
+
                     </form>
-                    </div>
-                    
-                    
-
                 </div>
-                
-            </div>
-                
-        <script>
-                        $(document).ready(function(){
-                            $("button").click(function(){
-                                
-                                var elem = document.getElementById("sidebar-toggle");
-                                if(elem.textContent == ">"){
-                                    
-                                    $(".main-content").animate({
-                                    'marginLeft': '+=200px'}, 500);
-            
-                                    elem.textContent = "<";
-                                    
-                                } else {
-                                                                       
-                                    $(".main-content").animate({
-                                    'marginLeft': '-=200px'}, 500);
-                                    
-                                    elem.textContent = ">";
-                                }
-                                                                                                
-                            });
-                            
-                        });
 
-    
+
+
+            </div>
+
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("button").click(function () {
+
+                    var elem = document.getElementById("sidebar-toggle");
+                    if (elem.textContent == ">") {
+
+                        $(".main-content").animate({
+                            'marginLeft': '+=200px'}, 500);
+
+                        elem.textContent = "<";
+
+                    } else {
+
+                        $(".main-content").animate({
+                            'marginLeft': '-=200px'}, 500);
+
+                        elem.textContent = ">";
+                    }
+
+                });
+
+            });
+
+
         </script>
     </body>
 </html>

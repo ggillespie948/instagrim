@@ -27,45 +27,45 @@
                 </ul>
             </div>
         </div>
-            <div class="main-content">
-                <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
-                <div class="content">
-                    <% request.getSession().invalidate(); %>
-                    <h1> You have been successfully logged out.. </h1>
-                </div>
-                
+        <div class="main-content">
+            <button onclick="myFunction();" class="side-m-button" data-toggle=".main-content" id="sidebar-toggle" > < </button>
+            <div class="content">
+                <% request.getSession().invalidate();%>
+                <h1> You have been successfully logged out.. </h1>
             </div>
-                
-        <script>
-                        $(document).ready(function(){
-                            $("button").click(function(){
-                                
-                                var elem = document.getElementById("sidebar-toggle");
-                                if(elem.textContent == ">"){
-                                    
-                                    $(".main-content").animate({
-                                    'marginLeft': '+=200px'}, 500);
-            
-                                    elem.textContent = "<";
-                                    
-                                } else {
-                                                                       
-                                    $(".main-content").animate({
-                                    'marginLeft': '-=200px'}, 500);
-                                    
-                                    elem.textContent = ">";
-                                }
-                                                                                                
-                            });
-                            
-                        });
 
-                        var showlogin = document.getElementById("Login");
-                        showlogin.onclick = function(){
-                            
-                            return false;
-                        }
-                        
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("button").click(function () {
+
+                    var elem = document.getElementById("sidebar-toggle");
+                    if (elem.textContent == ">") {
+
+                        $(".main-content").animate({
+                            'marginLeft': '+=200px'}, 500);
+
+                        elem.textContent = "<";
+
+                    } else {
+
+                        $(".main-content").animate({
+                            'marginLeft': '-=200px'}, 500);
+
+                        elem.textContent = ">";
+                    }
+
+                });
+
+            });
+
+            var showlogin = document.getElementById("Login");
+            showlogin.onclick = function () {
+
+                return false;
+            }
+
         </script>
     </body>
 </html>
