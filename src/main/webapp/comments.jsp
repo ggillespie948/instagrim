@@ -5,7 +5,7 @@
 --%>
 <%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+<%@ page import="uk.ac.dundee.computing.gjg.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -51,38 +51,29 @@
                     <a href="#"> <img src="/Instagrim/Image/${picid}"></a>
                     <h2> User Comments: </h2>  
                     <%
-                        // List of User pics recived by page here 
+                        // List of picture comments recieved here
                         java.util.ArrayList<String> lsComments = (java.util.ArrayList<String>) request.getAttribute("PicComments");
                         
-                        //Get username
                         String username = lg.getUsername();
                         
                         if (lsComments == null) {
 
                     %>
                     <p> No comments </p>
-
-                    <%                            } else {
-
-                    %>
-                    <ul>
-
-                    </ul>
-                    <%                                    //go through each pic in list
+                    <%  } else {
+                      //go through each comment in list
                         Iterator<String> iterator;
                         iterator = lsComments.iterator();
 
                         while (iterator.hasNext()) {
                             String comment = (String) iterator.next();
-                            
+                            //Take profile name at start of comment for link to profile
                             String commentProfile = comment.substring(0, comment.indexOf(':'));
-
 
                     %>
                     <div class="comment">
                         <p> <%= comment%> <a class="commentButton" href="${pageContext.request.contextPath}/Profile/<%= commentProfile %>" > View Profile  </a> </p> 
                     </div>
-                    
                     <%
                             }
                         }
