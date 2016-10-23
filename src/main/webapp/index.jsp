@@ -7,7 +7,7 @@
 
 <%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+<%@page import="uk.ac.dundee.computing.gjg.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -53,7 +53,7 @@
                         if (lg.getlogedin()) {
                 %>
                 <h2> Your Image Feed </h2>
-                <p class="MainText"> This project serves as course work in module AC32007. 
+                <p> This project serves as course work in module AC32007. </p>
                     <%
                         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("AllPicStream");
 
@@ -101,17 +101,6 @@
 
             });
 
-            var showlogin = document.getElementById("Login");
-            showlogin.onclick = function () {
-
-                return false;
-            }
-
         </script>
-
-
-
-
-
     </body>
 </html>

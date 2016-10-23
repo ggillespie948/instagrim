@@ -12,7 +12,7 @@
 
 <%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+<%@ page import="uk.ac.dundee.computing.gjg.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -56,13 +56,7 @@
                 %>
                 <h3> ${FirstName}'s Profile - ${ProfileName}  </h3>
                 <div class="profile"> 
-                    <%--
-                    
-                    --%>
                     <h2> Profile Picture: </h2>
-                    <%
-                        Pic ProfilePicture = (Pic) request.getAttribute("ProfilePict");
-                    %>
                     <%-- <a href="#"> <img src="/Instagrim/Thumb/<%= ProfilePictureID %>"></a> --%>
                     <a href="#"> <img src="/Instagrim/Thumb/${ProfilePictureID}"></a>
                     <br>
@@ -72,7 +66,7 @@
                         <br>
                         This is template Bio text, to be added later.
                         <br>
-                        Feel free to se any of these pictures.
+                        Feel free to use any of these pictures.
                     </div>
 
                     <h2> ${FirstName}'s Uploads: </h2>
@@ -100,9 +94,7 @@
                             }%>
                 </div>
             </div>
-
         </div>
-
         <script>
             $(document).ready(function () {
                 $("button").click(function () {
@@ -126,9 +118,6 @@
                 });
 
             });
-
-
-
         </script>
     </body>
 </html>

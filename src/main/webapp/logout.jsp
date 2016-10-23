@@ -59,13 +59,6 @@
                 });
 
             });
-
-            var showlogin = document.getElementById("Login");
-            showlogin.onclick = function () {
-
-                return false;
-            }
-
         </script>
     </body>
 </html>

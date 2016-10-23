@@ -6,7 +6,7 @@
 
 <%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+<%@ page import="uk.ac.dundee.computing.gjg.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -39,7 +39,7 @@
                     <li><a href="/Instagrim/Login">Login</a></li>
                     <li><a href="/Instagrim/Register">Register</a></li>
                         <%
-                        }%>
+                            }%>
                 </ul>
             </div>
         </div>
@@ -52,21 +52,17 @@
                     <%
                         // List of User pics recived by page here 
                         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
-                        
-                        
 
                         if (lsPics == null) {
-                            
-                        
+
+
                     %>
-                    
                     <p>No Pictures Found or Access Forbidden</p></br>
-                    
+
                     <p> User Required: </p> ${passUser}
                     <p> User Found: </p> ${currentUser}
-                    <%
-                    } else {
-                        //go through each pic in list
+                    <%                    } else {
+                        //go through each picture in the list and generate two buttons for profile picture and comments
                         Iterator<Pic> iterator;
                         iterator = lsPics.iterator();
                         while (iterator.hasNext()) {
@@ -76,8 +72,7 @@
                     <a href="/Instagrim/Comments/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a> 
                     <form action="Image" method="POST">
                         <button value="" class="button2"> Make Profile Picture </button>
-                        <button value="" class="button2"> Delete </button>
-                        <button value="" class="button2"> View Comments </button>
+                        <a class="button2" href="/Instagrim/Comments/<%=p.getSUUID()%>" > View Comments  </a>
                         <input type="hidden" name="PictureID" value="<%=p.getSUUID()%>" required>
                         <input type="hidden" name="PostType" value="ProfilePicture">
                     </form>
@@ -114,13 +109,6 @@
                 });
 
             });
-
-            var showlogin = document.getElementById("Login");
-            showlogin.onclick = function () {
-
-                return false;
-            }
-
         </script>
     </body>
 </html>
