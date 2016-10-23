@@ -36,8 +36,8 @@
                         <%}
                         } else {
                         %>
-                    <li><a href="login.jsp">Login</a></li>
-                    <li><a href="register.jsp">Register</a></li>
+                    <li><a href="/Instagrim/Login">Login</a></li>
+                    <li><a href="/Instagrim/Register">Register</a></li>
                         <%
                         }%>
                 </ul>
@@ -52,10 +52,16 @@
                     <%
                         // List of User pics recived by page here 
                         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
+                        
+                        
 
                         if (lsPics == null) {
+                            
+                        
                     %>
+                    
                     <p>No Pictures Found or Access Forbidden</p></br>
+                    
                     <p> User Required: </p> ${passUser}
                     <p> User Found: </p> ${currentUser}
                     <%

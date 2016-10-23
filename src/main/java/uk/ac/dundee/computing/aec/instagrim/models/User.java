@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import java.util.*;
 
 /**
  *
@@ -32,6 +33,9 @@ public class User {
     public boolean RegisterUser(String Username, String Password, String email, String Fname, String Lname) {
 
         boolean isUnique = existingUserCheck(Username);
+        
+        Set<String> emailSet = new HashSet<String>(Arrays.asList(""+email));
+        
 
         if (isUnique == true) {
             AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
@@ -43,12 +47,12 @@ public class User {
                 return false;
             }
             Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("insert into userprofiles (login,first_name,last_name,password) Values(?, ?, ?, ?)");
+            PreparedStatement ps = session.prepare("insert into userprofiles (login,first_name,last_name,password,email) Values(?, ?, ?, ?,?)");
             BoundStatement boundStatement = new BoundStatement(ps);
             try {
                 session.execute( // this is where the query is executed
                         boundStatement.bind( // here you are binding the 'boundStatement'
-                                Username, Fname, Lname, EncodedPassword));                                     //try execute statement
+                                Username, Fname, Lname, EncodedPassword, emailSet));                                     //try execute statement
 
                 //We are assuming this always works.  Also a transaction would be good here !
                 return true;
@@ -123,13 +127,13 @@ public class User {
     public String getFirstName(String username) {
 
         //Retrieve First Name of Account
-        Session sessionCQL = cluster.connect("instagrim");
+        Session session = cluster.connect("instagrim");
         PreparedStatement ps;
-        ps = sessionCQL.prepare("select first_name from userprofiles where login =?");
+        ps = session.prepare("select first_name from userprofiles where login =?");
 
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
-        rs = sessionCQL.execute( // this is where the query is executed
+        rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username));
 

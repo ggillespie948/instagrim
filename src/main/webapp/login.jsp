@@ -31,9 +31,9 @@
             <div class="content">
                 <h3> Login  </h3>
                 <div class="formHolder">
+                    <p> ${ErrorString} </p> 
                     <form method="POST"  action="Login">
                         <ul>
-                            <p> ${ErrorString} </p> 
                             <li>Username <input type="text" name="username" required></li>
                             <li>Password <input type="password" name="password" required></li>
                             <br/>

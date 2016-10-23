@@ -29,15 +29,15 @@
 
                             if (lg.getlogedin()) {
                     %>
-                    <li><a href="${pageContext.request.contextPath}/upload.jsp">Upload</a></li>
+                    <li><a href="/Instagrim/Upload">Upload</a></li>
                     <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
                     <li><a href="/Instagrim/Profile/<%=lg.getUsername()%>">Your Profile</a></li>
-                    <li><a href="${pageContext.request.contextPath}/logout.jsp">Sign Out</a></li>
+                    <li><a href="/Instagrim/Logout">Sign Out</a></li>
                         <%}
                         } else {
                         %>
-                    <li><a href="login.jsp">Login</a></li>
-                    <li><a href="register.jsp">Register</a></li>
+                    <li><a href="/Instagrim/Login">Login</a></li>
+                    <li><a href="/Instagrim/Register">Register</a></li>
                         <%
                             }%>
                 </ul>
@@ -74,11 +74,13 @@
 
                         while (iterator.hasNext()) {
                             String comment = (String) iterator.next();
+                            
+                            String commentProfile = comment.substring(0, comment.indexOf(':'));
 
 
                     %>
                     <div class="comment">
-                        <p> <%= comment%> <button class="commentButton"> View Profile </button> </p> 
+                        <p> <%= comment%> <a class="commentButton" href="${pageContext.request.contextPath}/Profile/<%= commentProfile %>" > View Profile  </a> </p> 
                     </div>
                     
                     <%

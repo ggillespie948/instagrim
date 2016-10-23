@@ -33,6 +33,7 @@
                     <h3> Create Your Account </h3>
                 </div>
                 <div class="formHolder">
+                    <p> ${RegErrorString} </p>
                     <form id="registerUser" action="Register" onsubmit="return formValidation()" method="POST">
                         <ul>
                             <label for ="username"> Username </label>

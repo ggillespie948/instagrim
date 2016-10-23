@@ -74,6 +74,11 @@ public class Profile extends HttpServlet {
         session.setAttribute("ProfileName",ProfileName);
         
         //Get first name of user profile
+        User us = new User();
+        us.setCluster(cluster);
+        String firstname = us.getFirstName(ProfileName);
+        
+        session.setAttribute("FirstName", firstname);
         
         
         //Display user profile pic

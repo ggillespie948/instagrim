@@ -68,6 +68,7 @@ public class PicModel {
             byte[] thumbb = picresize(picid.toString(), types[1]);
             int thumblength = thumbb.length;
             ByteBuffer thumbbuf = ByteBuffer.wrap(thumbb);
+            
             byte[] processedb = picdecolour(picid.toString(), types[1]);
             ByteBuffer processedbuf = ByteBuffer.wrap(processedb);
             int processedlength = processedb.length;
@@ -84,8 +85,8 @@ public class PicModel {
             session.execute(bsInsertPicToUser.bind(picid, user, DateAdded));
             session.close();
 
-        } catch (IOException ex) {
-            System.out.println("Error --> " + ex);
+        } catch (Exception e) {
+            System.out.println("Error --> " + e);
         }
     }
 
@@ -153,9 +154,6 @@ public class PicModel {
     public java.util.List<String> getComments(java.util.UUID picid) {
         Session session = cluster.connect("instagrim");
 
-        System.out.println("**** ***** **** **** ** cOMMENT:");
-        System.out.println(picid);
-
         PreparedStatement ps = session.prepare("select piccomments from pics where picid =?"); // select all comments
         ResultSet rs = null;
         BoundStatement bs = new BoundStatement(ps);
@@ -169,7 +167,6 @@ public class PicModel {
             for (Row row : rs) { //go through every row in pic list and convert to string
                 java.util.List<String> comments = row.getList("piccomments", String.class);
 
-                System.out.println("**** ***** **** **** ** cOMMENT:" + comments);
                 //Add comment to Comments
                 return comments;
             }

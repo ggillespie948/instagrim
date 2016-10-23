@@ -172,7 +172,9 @@ public class Image extends HttpServlet {
             response.sendRedirect("/Instagrim/Profile/" + currentUser);
 
         } else {
+            response.sendRedirect("/Instagrim/");
             for (Part part : request.getParts()) {
+                
                 System.out.println("Part Name " + part.getName());
 
                 String type = part.getContentType();
@@ -195,13 +197,17 @@ public class Image extends HttpServlet {
                     System.out.println("Length : " + b.length);
                     PicModel tm = new PicModel();
                     tm.setCluster(cluster);
+                    
                     tm.insertPic(b, type, filename, username, title);
-
+                    
+                    
+                    
                     is.close();
+                    
+                    
                 }
                 
-                response.sendRedirect("/Instagrim/");
-                //response.sendRedirect("/Instagrim/Profile/" + username);
+                
 
             }
 

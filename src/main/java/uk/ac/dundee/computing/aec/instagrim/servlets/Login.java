@@ -87,7 +87,12 @@ public class Login extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-
+        
+        //Clear Reg error if any
+        HttpSession session = request.getSession();
+        String error = "";
+        session.setAttribute("RegErrorString", error);
+        
         RequestDispatcher rd = request.getRequestDispatcher("/login.jsp"); //call up view login jsp
         rd.forward(request, response); //transfer control to login.jsp
     }

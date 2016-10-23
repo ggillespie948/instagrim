@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 
@@ -35,6 +36,12 @@ public class Register extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+        
+        //Clear login error if any
+        HttpSession session = request.getSession();
+        String error = "";
+        session.setAttribute("ErrorString", error);
+        
         
         RequestDispatcher rd = request.getRequestDispatcher("/register.jsp"); //call up view login jsp
         rd.forward(request, response); //transfer control to login.jsp
@@ -59,6 +66,7 @@ public class Register extends HttpServlet {
         String fname=request.getParameter("first-name");
         String lname=request.getParameter("last-name");
         
+        HttpSession session = request.getSession();
         
         //add further validation for user name and password match *****************************
         boolean validDetails = true;
@@ -66,13 +74,22 @@ public class Register extends HttpServlet {
         
         //if unsuccessful redirect
         
+        
+        
         //Register New User
         User us=new User();
         us.setCluster(cluster);
-        us.RegisterUser(username, password, email, fname, lname);
+         if (us.RegisterUser(username, password, email, fname, lname) == true){
+             //redirect to login page
+            response.sendRedirect("/Instagrim/Login");
+             
+         } else {
+           String error = "Registration failed - username already in use";
+           session.setAttribute("RegErrorString", error);
+           response.sendRedirect("/Instagrim/Register");  
+         }
         
-        //redirect to login page
-	response.sendRedirect("/Instagrim/Login");
+        
         
     }
 
